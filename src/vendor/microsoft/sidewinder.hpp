@@ -29,6 +29,14 @@ class SideWinder : public Keyboard {
 		unsigned char macroPad_;
 		void toggleMacroPad();
 		void switchProfile();
+		/**
+		 * Handle a macro key press, one of S1 to S30
+		 */
+		void handleMacroKey(struct KeyData *keyData);
+		/**
+		 * Handle an extra key press, like bank switch button or sidewinder/gamecenter button
+		 */
+		void handleExtraKey(struct KeyData *keyData);
 };
 
 #endif

@@ -121,21 +121,50 @@ struct KeyData SideWinder::getInput() {
 }
 
 void SideWinder::handleKey(struct KeyData *keyData) {
-	if (keyData->type == KeyData::KeyType::Macro) {
-		Key key(keyData);
-		std::string macroPath = key.getMacroPath(profile_);
-		std::thread thread(playMacro, macroPath, virtInput_);
-		thread.detach();
-	} else if (keyData->type == KeyData::KeyType::Extra) {
-		if (keyData->index == SW_KEY_GAMECENTER) {
-			toggleMacroPad();
-		} else if (keyData->index == SW_KEY_RECORD) {
-			handleRecordMode(&ledRecord_, SW_KEY_RECORD);
-		} else if (keyData->index == SW_KEY_PROFILE) {
-			switchProfile();
-		}
+	switch(keyData->type) {
+		case(KeyData::KeyType::Macro):
+			handleMacroKey(keyData);
+			break;
+		case(KeyData::KeyType::Extra):
+			handleExtraKey(keyData);
+			break;
+		default:
+			/* Gon an KeyData::KeyType::Unknown.
+			 * Are the media keys (Play/Pause, Rewind, Mute, etc) of type Unknown?
+			 * TODO: Put some warning here, if the latter is not true and Unknown should not happen.
+			 */
+			break;
 	}
 }
+
+void SideWinder::handleMacroKey(KeyData* keyData) {
+	Key key(keyData);
+	std::string macroPath = key.getMacroPath(profile_);
+	std::thread thread(playMacro, macroPath, virtInput_);
+	thread.detach();
+}
+
+void SideWinder::handleExtraKey(KeyData* keyData) {
+	switch(keyData->index) {
+		case(SW_KEY_GAMECENTER):
+			toggleMacroPad();
+			break;
+		case(SW_KEY_RECORD):
+			handleRecordMode(&ledRecord_, SW_KEY_RECORD);
+			break;
+		case(SW_KEY_PROFILE):
+			switchProfile();
+			break;
+		default:
+			/*
+			 * Getting here means the keyboard sent an unknown opcode or the packet was corrupted.
+			 * The first case means we missed some hardware feature.
+			 * TODO: Put some warning here.
+			 */
+			break;
+	}
+}
+
 
 SideWinder::SideWinder(struct Device *device,
 		sidewinderd::DevNode *devNode, libconfig::Config *config,
