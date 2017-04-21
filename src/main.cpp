@@ -14,6 +14,7 @@
 
 #include <process.hpp>
 #include <core/device_manager.hpp>
+#include "help.hpp"
 
 void setupConfig(libconfig::Config *config, std::string configFilePath = "/etc/sidewinderd.conf") {
 	try {
@@ -43,17 +44,35 @@ void setupConfig(libconfig::Config *config, std::string configFilePath = "/etc/s
 	}
 }
 
+void print_help(std::string program) {
+	std::cout
+		<< "usage:\t" << program << " [OPTION]..." << "\n"
+		<< "TODO: Short description" << "\n"
+		<< "\n"
+		<< "Mandatory arguments to long options are mandatory for short options too." << "\n"
+		<< format_option_help()
+		<< "Report bugs here: TODO"
+		<< std::endl;
+	
+}
+
 int main(int argc, char *argv[]) {
 	/* object for managing runtime information */
 	Process process;
-
-	/* set program name */
-	process.setName(argv[0]);
+	
+	/* set program name. argv[0] might be the nullptr under certain conditions.
+	 * If so, use "sidewinderd" as a default.
+	 */
+	if (*argv != nullptr)
+		process.setName(std::string(argv[0]));
+	else
+		process.setName(std::string("sidewinderd"));
 
 	/* handling command-line options */
 	static struct option longOptions[] = {
 		{"config", required_argument, 0, 'c'},
 		{"daemon", no_argument, 0, 'd'},
+		{"help", no_argument, 0, 'h'},
 		{"version", no_argument, 0, 'v'},
 		{0, 0, 0, 0}
 	};
@@ -65,7 +84,7 @@ int main(int argc, char *argv[]) {
 	/* flags */
 	bool shouldDaemonize = false;
 
-	while ((opt = getopt_long(argc, argv, ":c:dp:v", longOptions, &index)) != -1) {
+	while ((opt = getopt_long(argc, argv, ":c:dhp:v", longOptions, &index)) != -1) {
 		switch (opt) {
 			case 'c':
 				configFilePath = optarg;
@@ -78,6 +97,9 @@ int main(int argc, char *argv[]) {
 				break;
 			case 'v':
 				std::cout << "sidewinderd version " << process.getVersion() << std::endl;
+				return EXIT_SUCCESS;
+			case 'h':
+				print_help(process.getName());
 				return EXIT_SUCCESS;
 			case ':':
 				std::cout << "Missing argument." << std::endl;
