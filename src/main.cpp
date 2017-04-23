@@ -44,19 +44,6 @@ void setupConfig(libconfig::Config *config, std::string configFilePath = "/etc/s
 	}
 }
 
-void print_help(std::string program) {
-	std::cout
-		<< "usage:\t" << program << " [OPTION]..." << "\n"
-		<< "Enables usage of advanced features of Microsoft Sidewinder X4/X6 keyboards and some\n"
-		<< "supported Logitech keyboards (like G105, G710 and G710+)." << "\n"
-		<< "\n"
-		<< "Mandatory arguments to long options are mandatory for short options too." << "\n"
-		<< format_option_help()
-		<< "Report bugs here: https://github.com/tolga9009/sidewinderd/issues"
-		<< std::endl;
-	
-}
-
 int main(int argc, char *argv[]) {
 	/* object for managing runtime information */
 	Process process;
@@ -100,7 +87,7 @@ int main(int argc, char *argv[]) {
 				std::cout << "sidewinderd version " << process.getVersion() << std::endl;
 				return EXIT_SUCCESS;
 			case 'h':
-				print_help(process.getName());
+				std::cout << get_formatted_help_text(process.getName()) << std::endl;
 				return EXIT_SUCCESS;
 			case ':':
 				std::cout << "Missing argument." << std::endl;

@@ -76,12 +76,10 @@ constexpr struct program_option available_options[] = {
 	},
 };
 
-
 /**
- * Format the help text for command line switches
- * @returns Multiline formatted string containing help text for all command line switches
+ * Formats and returns the command line help text. This function does not print anything to std::cout.
+ * @returns Formatted command line help text
  */
-const std::string format_option_help();
-
+const std::string get_formatted_help_text(const std::string program_name);
 
 #endif // CLI_HELP_CLASS_H

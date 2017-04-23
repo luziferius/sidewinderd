@@ -56,6 +56,11 @@ inline std::string format_description(std::string line, struct program_option* o
 	return line;
 
 }
+
+/**
+ * Format the help text for command line switches
+ * @returns Multiline formatted string containing help text for all command line switches
+ */
 const std::string format_option_help() {
 	std::string result = std::string();
 	for(auto option : available_options) {
@@ -69,5 +74,17 @@ const std::string format_option_help() {
 		line = format_description(line, &option);
 		result.append(line);
 	}
+	return result;
+}
+
+const std::string get_formatted_help_text(const std::string program_name) {
+	std::string result = std::string()
+		.append("usage:\t").append(program_name).append(" [OPTION]..." "\n")
+		.append("Enables usage of advanced features of Microsoft Sidewinder X4/X6 keyboards and some" "\n")
+		.append("supported Logitech keyboards (like G105, G710 and G710+)." "\n")
+		.append("\n")
+		.append("Mandatory arguments to long options are mandatory for short options too." "\n")
+		.append(format_option_help())
+		.append("Report bugs here: https://github.com/tolga9009/sidewinderd/issues");
 	return result;
 }
