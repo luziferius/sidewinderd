@@ -5,17 +5,24 @@
  * MIT License. For more information, see LICENSE file.
  */
 
-#ifndef HELP_CLASS_H
-#define HELP_CLASS_H
+#ifndef CLI_HELP_CLASS_H
+#define CLI_HELP_CLASS_H
 
 #include <string>
 #include <string.h>
 
+/**
+ * Defines the components of a command line switch help line.
+ * Do not specify dashes for short options (-) or long options (--).
+ * The formatter will add those while processing.
+ * String options default to empty strings instead of undefined values,
+ * so definitions of unneeded elements can be omitted.
+ */
 struct program_option {
-	// Default to empty strings instead of undefined values, so definitions of unneeded elements
-	// can be omitted.
+	/** The short option character. Should be a single character string only. */
 	const char* short_option = "";
 	const char* long_option = "";
+	/** The textual option description. Can be of any length. The formatter will do line wrapping. */
 	const char* description = "";
 	const char* argument = "";
 	/**
@@ -26,14 +33,17 @@ struct program_option {
 };
 
 constexpr int HELP_OUTPUT_LINE_WIDTH = 80;
+/**
+ * Minimal distance between a command line switch and its description.
+ */
 constexpr int HELP_DESCRIPTION_TEXT_HORIZONTAL_DISTANCE = 4;
 
 /** 
  * Define command line argument help here. Element order defines the print output order.
- * NOTE: Initialisation must be in order of struct declaration and not miss
- * any middle element. Otherwise compilation fails with
+ * NOTE: Element initialisation must be in order of struct declaration and not miss
+ * any middle element. Otherwise compilation fails with error message
  * "sorry, unimplemented: non-trivial designated initializers not supported"
- * (at least when using g++ 5.4.0)
+ * (at least when using g++ 5.4.0).
  * This compiler restriction reduces the usefulness of this construct a bit, but
  * may be lifted in the future.
  */
@@ -69,8 +79,9 @@ constexpr struct program_option available_options[] = {
 
 /**
  * Format the help text for command line switches
+ * @returns Multiline formatted string containing help text for all command line switches
  */
 const std::string format_option_help();
 
 
-#endif // HELP_CLASS_H
+#endif // CLI_HELP_CLASS_H

@@ -14,7 +14,7 @@
 
 #include <process.hpp>
 #include <core/device_manager.hpp>
-#include "help.hpp"
+#include <core/cli_help.hpp>
 
 void setupConfig(libconfig::Config *config, std::string configFilePath = "/etc/sidewinderd.conf") {
 	try {
@@ -47,11 +47,12 @@ void setupConfig(libconfig::Config *config, std::string configFilePath = "/etc/s
 void print_help(std::string program) {
 	std::cout
 		<< "usage:\t" << program << " [OPTION]..." << "\n"
-		<< "TODO: Short description" << "\n"
+		<< "Enables usage of advanced features of Microsoft Sidewinder X4/X6 keyboards and some\n"
+		<< "supported Logitech keyboards (like G105, G710 and G710+)." << "\n"
 		<< "\n"
 		<< "Mandatory arguments to long options are mandatory for short options too." << "\n"
 		<< format_option_help()
-		<< "Report bugs here: TODO"
+		<< "Report bugs here: https://github.com/tolga9009/sidewinderd/issues"
 		<< std::endl;
 	
 }

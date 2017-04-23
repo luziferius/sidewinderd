@@ -4,10 +4,16 @@
  * This source file is part of Sidewinder daemon and is distributed under the
  * MIT License. For more information, see LICENSE file.
  */
-#include "help.hpp"
+#include "cli_help.hpp"
 
 /**
  * Calculate the indention width for descriptions.
+ * This is the amount of characters in a line before the description starts:
+ *   -l --long_option ARG   description of argument
+ * _________________________ ← indention width
+ * 
+ * This function is used to align all description texts, even when line wrapping is required.
+ * Starting with C++14, this can be declared as constexpr.
  */
 constexpr int indention_width() {
 	int max_length = -1;
@@ -51,7 +57,7 @@ inline std::string format_description(std::string line, struct program_option* o
 
 }
 const std::string format_option_help() {
-	std::string result = std::string("");
+	std::string result = std::string();
 	for(auto option : available_options) {
 		std::string line = std::string(option.leading_newlines, '\n');
 		// building the line
