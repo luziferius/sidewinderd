@@ -1,5 +1,10 @@
+/**
+ * Copyright (c) 2017 Thomas Hess <thomas.hess@udo.edu>
+ *
+ * This source file is part of Sidewinder daemon and is distributed under the
+ * MIT License. For more information, see LICENSE file.
+ */
 #include "help.hpp"
-
 
 /**
  * Calculate the indention width for descriptions.
